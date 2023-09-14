@@ -1,6 +1,22 @@
-//Todo---> creat structure for philosophers.
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joe <joe@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/14 11:57:19 by joe               #+#    #+#             */
+/*   Updated: 2023/09/14 12:57:50 by joe              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//Todo---> creat check for acetps types. 
+#include "philosopher.h"
+
+//TODO--> create makefilen (ok)
+
+//TODO---> create check for acetps types. 
+
+//TODO--> create sub sctructure for each Philosophers
 
 // • Your(s) program(s) should take the following arguments:
 
@@ -27,53 +43,6 @@
 // times, the simulation stops. If not specified, the simulation stops when a
 // philosopher dies.
 
-
-#include <stdio.h>
-
-typedef struct s_all_philos
-{
-    int number_of_philosophers;
-    int time_to_die;
-    int time_to_eat; 
-    int time_to_sleep;
-    int number_of_times_each_philosopher_must_eat;
-
-}t_all_philos;
-
-void init_all_philos (t_all_philos *s_all_philos)
-{
-    s_all_philos->number_of_philosophers = 0;
-    s_all_philos->time_to_die = 0;
-    s_all_philos->time_to_eat = 0;
-    s_all_philos->time_to_sleep = 0;
-    s_all_philos->number_of_times_each_philosopher_must_eat = 0;
-}
-
-int ft_atoi(char *str)
-{
-    int i = 0;
-    int negative = 1;
-    int result = 0;
-
-    while(str[i] <= 32)
-        i++;
-    
-    if(str[i] == '-')
-    {
-        negative = -1;
-        i++;
-    }
-
-    while (str[i] == '-' || str[i] == '+')
-        i++;
-
-    while(str[i] >= '0' && str[i] <= '9')
-    {
-        result = result * 10 + str[i] - '0';
-        i++;
-    }
-    return(result *negative); 
-}
 
 int main (int ac, char **av)
 {
@@ -110,8 +79,6 @@ int main (int ac, char **av)
     }
     else
         printf("numero de parametros incorreto!\n");
-
-    
 
     return (0);  
 }
