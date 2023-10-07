@@ -6,61 +6,184 @@
 /*   By: joe <joe@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:00:18 by joe               #+#    #+#             */
-/*   Updated: 2023/09/14 13:04:22 by joe              ###   ########.fr       */
+/*   Updated: 2023/10/07 16:09:24 by joe              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHER_H
 # define PHILOSOPHER_H
 
+//! =============================================================================
+//! INCLUDES
+//! =============================================================================
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include <sys/time.h>
+# include <limits.h>
+#include <stdint.h> //u_int64_t
 
-#include <stdio.h>
+//! =============================================================================
+//! COLORS
+//! =============================================================================
+#define RED_TEXT     "\033[0;31m"
+#define GREEN_TEXT   "\033[0;32m"
+#define YELLOW_TEXT  "\033[0;33m"
+#define RESET_COLOR  "\033[0m"
 
 
+//! =============================================================================
+//! MACROS
+//! =============================================================================
+#define ERROR_INVAL "Error: Invalid arguments\n" 
+#define ERROR_INSU "Error: Insufficient arguments\n" 
+#define ERROR_MAX "Error: The number of arguments exceeds the expected value\n" 
+#define ERRO_INT_MAX_MIN "Error: the maximum or minimum integer has been exceeded\n"
+
+// #define	EXIT_FAILURE	1	/* Failing exit status.  */
+// #define	EXIT_SUCCESS	0	/* Successful exit status.  */
 
 
-// =============================================================================
-// STRUCTS
-// =============================================================================
-/**
- * @brief This struct for crate philosophes
- * 
- */
+# define TAKE_FORKS "has taken a fork"
+# define TAKE_FORKS_LEFT "has taken a fork (left 🍴🫲)"
+# define TAKE_FORKS_RIGHT "has taken a fork (right 🫱🍴)"
 
-typedef struct s_all_philos
+# define EAT "is eating 🍝" 
+# define SLEEP "is sleeping 😴"
+# define THINK "is thinking 💭"
+# define DIED "died 💀"
+
+//! =============================================================================
+//! STRUCTS
+//! =============================================================================
+typedef enum e_philo_state
 {
-    int number_of_philosophers;
-    int time_to_die;
-    int time_to_eat; 
-    int time_to_sleep;
-    int number_of_times_each_philosopher_must_eat;
+	EATING = 0,
+	SLEEPING = 1,
+	THINKING = 2,
+	DEAD = 3,
+	FULL = 4,
+	IDLE = 5
+}t_state;
 
-}t_all_philos;
+typedef struct s_data_each_philos
+{
+    int				id;
+	int				nb_meals_had;
+    t_state         state;
+	pthread_mutex_t	*left_f;
+	pthread_mutex_t	*right_f;
+	pthread_mutex_t	mut_state; //!Estudar
+	pthread_mutex_t	mut_nb_meals_had; //!Estudar
+	pthread_mutex_t	mut_last_eat_time; //!Estudar
+	u_int64_t		last_eat_time; //! u_int64_t »» armazenar números inteiros não negativos com uma faixa muito ampla
+    struct s_info_philos   *info_philos;
+}t_data_each_philos;
+
+typedef struct s_info_philos
+{
+    int				nb_philos;
+	int				nb_meals;
+	int				nb_full_p;
+	bool			keep_iterating;
+	u_int64_t		eat_time;
+	u_int64_t		die_time;
+	u_int64_t		sleep_time;
+	u_int64_t		start_time;
+	pthread_mutex_t	mut_eat_t;
+	pthread_mutex_t	mut_die_t;
+	pthread_mutex_t	mut_sleep_t;
+	pthread_mutex_t	mut_print;
+	pthread_mutex_t	mut_nb_philos;
+	pthread_mutex_t	mut_keep_iter;
+	pthread_mutex_t	mut_start_time;
+	pthread_t		monit_all_alive;
+	pthread_t		monit_all_full;
+	pthread_t		*philo_ths;
+	pthread_mutex_t	*forks;
+	t_data_each_philos			*philos;
+    //struct s_data_each_philos   *philo_each_data;
+}t_info_philos;
 
 
-// =============================================================================
-// FUNCTIONS
-// =============================================================================
+//! =============================================================================
+//! FUNCTIONS
+//! =============================================================================
 
-/**
- * Converts a string to an integer.
- *
- * This function takes a string `str` and converts it to an integer.
- *
- * @param str The string to be converted.
- * @return The resulting integer value from the conversion.
- */
-int ft_atoi(char *str);
+//!ultis.c
+long long	ft_atol(const char *str);
+int	ft_isdigit(int character);
+void print_jo(t_info_philos *s_info_philos);
+int	check_int(long long nbr);
+int	check_num(char **str);
+int	print_error(void);
+int	error_arg_max_min(int argc, char **argv);
 
-/**
- * Initializes a structure of type t_all_philos.
- *
- * This function initializes a structure of type `t_all_philos` with default values.
- * The `t_all_philos` structure typically represents a set of parameters for a philosopher's simulation.
- *
- * @param s_all_philos A pointer to the `t_all_philos` structure to be initialized.
- */
-void init_all_philos (t_all_philos *s_all_philos);
 
+//!init.c
+int copy_value_philo (t_info_philos *s_info_philos, int ac  ,char **av);
+int	init_forks(t_info_philos *s_info_philos);
+int	init_philos(t_info_philos *info_philos);
+int	malloc_data_pointers(t_info_philos *info_philos);
+int	philosophers(int argc, char **argv);
+
+
+//!rotine.c
+void		notify_all_philos(t_info_philos *data);
+void		*all_full_routine(void *data_p);
+void		*all_alive_routine(void *data_p);
+void		*routine(void *philo_p);
+
+//!threads.c
+int			run_threads(t_info_philos *data);
+int			join_threads(t_info_philos *data);
+int			just_one_philo(t_data_each_philos *philo);
+void		set_keep_iterating(t_info_philos *data, bool set_to);
+void		set_philo_state(t_data_each_philos *philo, t_state state);
+
+
+//!actions_eat.c
+bool		is_philo_full(t_info_philos *data, t_data_each_philos *philo);
+void		update_last_meal_time(t_data_each_philos *philo);
+void		update_nb_meals_had(t_data_each_philos *philo);
+void		sleep_for_eating(t_data_each_philos *philo);
+int			eat(t_data_each_philos *philo);
+
+//!action.c
+int			ft_sleep(t_data_each_philos *philo);
+void		ft_usleep(uint64_t sleep_time);
+int			think(t_data_each_philos *philo);
+bool		philo_died(t_data_each_philos *philo);
+void		wait_until(u_int64_t wakeup_time);
+
+//!forks.c
+void		drop_left_fork(t_data_each_philos *philo);
+void		drop_right_fork(t_data_each_philos *philo);
+int			take_left_fork(t_data_each_philos *philo);
+int			take_right_fork(t_data_each_philos *philo);
+int			take_forks(t_data_each_philos *philo);
+
+//!time.c
+uint64_t	get_start_time(t_info_philos *data);
+uint64_t	get_die_time(t_info_philos *data);
+uint64_t	get_sleep_time(t_info_philos *data);
+uint64_t	get_eat_time(t_info_philos *data);
+uint64_t	get_last_eat_time(t_data_each_philos *philo);
+
+//!get_utils.c
+bool		nb_meals_option(t_info_philos *data);
+void		print_nb_meals_had(t_data_each_philos *philo);
+void		print_msg(t_info_philos *data, int id, char *msg);
+void		print_mut(t_info_philos *data, char *msg);
+void		free_data(t_info_philos *data);
+
+//!get_utils_2.c
+bool		get_keep_iter(t_info_philos *data);
+int			get_nb_philos(t_info_philos *data);
+t_state		get_philo_state(t_data_each_philos *philo);
+int			get_nb_meals_philo_had(t_data_each_philos *philo);
+u_int64_t	get_time(void);
 
 #endif

@@ -6,56 +6,59 @@
 #    By: joe <joe@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/14 12:04:41 by joe               #+#    #+#              #
-#    Updated: 2023/09/14 13:05:33 by joe              ###   ########.fr        #
+#    Updated: 2023/10/07 16:13:31 by joe              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
-NAME	=	main
-
+NAME = philo
 CC = cc
-
+RM = rm -rf
 ECHO = @printf
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=thread -pthread
 
-HEADERS	= includes
+SRC_DIR = src/
+OBJ_DIR = objects/
 
-CFLAGS	=	-Wall -Wextra -Werror  -Ofast -march=native -fno-builtin -ftree-vectorize -fstrict-aliasing
+SRC =	action \
+		action_eat \
+		routine \
+		forks \
+		times \
+		get_utils \
+		get_utils_2 \
+		init \
+		main \
+		threads \
+		utils
 
-OBJ_PATH =	obj
+#SRCS = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC)))
 
-SRC =	main.c	./src/ultis.c
+OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC)))
 
-OBJ = $(SRC:.c=.o)
+all: $(NAME)
 
-
-all : $(NAME)
-
-%.o:		%.c
-			@$(CC) $(CFLAGS) -I $(HEADERS) -c $< -o $@
-
-
-$(NAME) : $(LIBS) $(OBJ)
-	$(ECHO) "$(GRN)Linking $(NAME)...$(EOC)\n"
-	$(CC) $^ -o $@ $(CFLAGS)
-
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	$(ECHO) "$(GRN)Making $@ with \"$(CFLAGS) 
-	@mkdir -p $(OBJ_PATH) 2> /dev/null
+$(NAME): $(OBJS)
+	$(ECHO) "$(GRN)Compiling philo...$(EOC)\n"
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(ECHO) "Done!\n"
+	
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c 
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
-	$(ECHO) "$(RED)Cleaning objects...$(EOC)\n"
-	rm -f $(OBJ)
-	@rmdir $(OBJ_PATH) 2> /dev/null || true
+	$(ECHO) "$(GRN)Cleaning objects...$(EOC)\n"
+	@$(RM) $(OBJ_DIR) $(NAME)
 
 fclean : clean
-	$(ECHO) "$(RED)Cleaning $(NAME)...$(EOC)\n"
+	$(ECHO) "$(GRN)Cleaning $(NAME)...$(EOC)\n"
 	rm -f $(NAME)
 
-re : fclean all
+re: fclean all
 
-.PHONY: all clean re fclean
+.PHONY: all clean fclean re
 
-#COLORS
 RED = \033[1;31m
 GRN = \033[1;32m
 EOC = \033[0m
+
