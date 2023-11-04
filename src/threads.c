@@ -24,7 +24,7 @@ int	run_threads(t_info_philos *info_philos)
 	{
 		if (pthread_create(&info_philos->philo_ths[i], NULL,
 				&routine, &info_philos->philos[i]))
-			return (1);
+			return (1); 
 	}
 	if (pthread_create(&info_philos->monit_all_alive, NULL,
 			&all_alive_routine, info_philos))
