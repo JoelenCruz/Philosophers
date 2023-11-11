@@ -6,7 +6,7 @@
 /*   By: joe <joe@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 12:53:04 by joe               #+#    #+#             */
-/*   Updated: 2023/10/07 15:13:59 by joe              ###   ########.fr       */
+/*   Updated: 2023/11/11 11:58:18 by joe              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,6 @@ bool	nb_meals_option(t_info_philos *data)
 	return (false);
 }
 
-void	print_nb_meals_had(t_data_each_philos *philo)
-{
-	t_info_philos	*data;
-
-	data = philo->info_philos;
-	pthread_mutex_lock(&data->mut_print);
-	printf("Philo %d ate %d times\n", philo->id, philo->nb_meals_had);
-	pthread_mutex_unlock(&data->mut_print);
-}
-
 void	print_msg(t_info_philos *data, int id, char *msg)
 {
 	uint64_t	time;
@@ -37,13 +27,6 @@ void	print_msg(t_info_philos *data, int id, char *msg)
 	pthread_mutex_lock(&data->mut_print);
 	if (get_keep_iter(data))
 		printf("%lu %d %s\n", time, id, msg);
-	pthread_mutex_unlock(&data->mut_print);
-}
-
-void	print_mut(t_info_philos *data, char *msg)
-{
-	pthread_mutex_lock(&data->mut_print);
-	printf("%s\n", msg);
 	pthread_mutex_unlock(&data->mut_print);
 }
 

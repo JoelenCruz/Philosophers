@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcruz-da <jcruz-da@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joe <joe@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:00:18 by joe               #+#    #+#             */
-/*   Updated: 2023/11/04 15:32:33 by jcruz-da         ###   ########.fr       */
+/*   Updated: 2023/11/11 11:58:23 by joe              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ int			ft_sleep(t_data_each_philos *philo);
 void		ft_usleep(uint64_t sleep_time);
 int			think(t_data_each_philos *philo);
 bool		philo_died(t_data_each_philos *philo);
-void		wait_until(u_int64_t wakeup_time);
 
 //!forks.c
 void		drop_left_fork(t_data_each_philos *philo);
@@ -165,9 +164,7 @@ uint64_t	get_last_eat_time(t_data_each_philos *philo);
 
 //!get_utils.c
 bool		nb_meals_option(t_info_philos *data);
-void		print_nb_meals_had(t_data_each_philos *philo);
 void		print_msg(t_info_philos *data, int id, char *msg);
-void		print_mut(t_info_philos *data, char *msg);
 void		free_data(t_info_philos *data);
 
 //!get_utils_2.c

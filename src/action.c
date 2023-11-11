@@ -6,7 +6,7 @@
 /*   By: joe <joe@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 12:43:45 by joe               #+#    #+#             */
-/*   Updated: 2023/10/07 15:12:45 by joe              ###   ########.fr       */
+/*   Updated: 2023/11/11 11:41:00 by joe              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,4 @@ bool	philo_died(t_data_each_philos *philo)
 		result = true;
 	}
 	return (result);
-}
-
-void	wait_until(u_int64_t wakeup_time)
-{
-	int			margin;
-	u_int64_t	time;
-
-	margin = 5;
-	while (1)
-	{
-		time = get_time();
-		if (wakeup_time <= time + margin)
-		{
-			while (wakeup_time > time)
-				time = get_time();
-			break ;
-		}
-		else
-		{
-			usleep(1000 * (wakeup_time - time - margin));
-		}
-	}
 }

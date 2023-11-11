@@ -6,7 +6,7 @@
 /*   By: joe <joe@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:22:00 by evdos-sa          #+#    #+#             */
-/*   Updated: 2023/10/07 12:37:25 by joe              ###   ########.fr       */
+/*   Updated: 2023/11/11 11:55:14 by joe              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	run_threads(t_info_philos *info_philos)
 	{
 		if (pthread_create(&info_philos->philo_ths[i], NULL,
 				&routine, &info_philos->philos[i]))
-			return (1); 
+			return (1);
 	}
 	if (pthread_create(&info_philos->monit_all_alive, NULL,
 			&all_alive_routine, info_philos))
